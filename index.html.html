@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$CIRCLE - The Corporate Cabal</title>
+    <!-- Tailwind CSS for Layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Orbitron for headers, Inter for body -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap"
+        rel="stylesheet">
+
+    <!-- CUSTOM CSS (You can move this to style.css) -->
+    <style>
+        :root {
+            --neon-green: #00ff41;
+            --neon-red: #ff003c;
+            --corp-gold: #d4af37;
+            --deep-black: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: var(--deep-black);
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .glitch-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* --- Neon Red Text Effect --- */
+        .text-neon-red {
+            color: var(--neon-red);
+            text-shadow: 0 0 10px rgba(255, 0, 60, 0.6), 0 0 20px rgba(255, 0, 60, 0.4), 0 0 30px rgba(255, 0, 60, 0.2);
+        }
+
+        /* --- Background Animation Canvas --- */
+        #network-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* --- Glitch Effect Class --- */
+        .glitch-text {
+            position: relative;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 red;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -1px 0 blue;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(11px, 9999px, 81px, 0);
+            }
+
+            20% {
+                clip: rect(87px, 9999px, 13px, 0);
+            }
+
+            40% {
+                clip: rect(22px, 9999px, 63px, 0);
+            }
+
+            60% {
+                clip: rect(61px, 9999px, 12px, 0);
+            }
+
+            80% {
+                clip: rect(56px, 9999px, 49px, 0);
+            }
+
+            100% {
+                clip: rect(14px, 9999px, 34px, 0);
+            }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% {
+                clip: rect(65px, 9999px, 100px, 0);
+            }
+
+            20% {
+                clip: rect(24px, 9999px, 11px, 0);
+            }
+
+            40% {
+                clip: rect(93px, 9999px, 73px, 0);
+            }
+
+            60% {
+                clip: rect(32px, 9999px, 54px, 0);
+            }
+
+            80% {
+                clip: rect(8px, 9999px, 93px, 0);
+            }
+
+            100% {
+                clip: rect(4px, 9999px, 36px, 0);
+            }
+        }
+
+        /* --- Cylindrical CA Box --- */
+        .ca-container {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .ca-container:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.3);
+        }
+
+        /* --- Image Aspect Ratio Utilities --- */
+        .aspect-banner {
+            aspect-ratio: 3 / 1;
+        }
+
+        .aspect-card {
+            aspect-ratio: 1.83 / 1;
+        }
+
+        /* --- Card Styling --- */
+        .ceo-card {
+            background: linear-gradient(145deg, #0a0a0a, #111);
+            border: 1px solid #222;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .ceo-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--corp-gold);
+        }
+
+        .ceo-card img {
+            filter: grayscale(80%) contrast(1.2);
+            transition: filter 0.3s;
+        }
+
+        .ceo-card:hover img {
+            filter: grayscale(0%) contrast(1);
+        }
+
+        /* Grid Lines Background Pattern for sections */
+        .grid-bg {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-green-900 selection:text-white">
+
+    <!-- Background Canvas -->
+    <canvas id="network-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 left-0 border-b border-white/10 bg-black/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl font-bold tracking-tighter glitch-font text-neon-red">$CIRCLE</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#about"
+                            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">The
+                            Theory</a>
+                        <a href="#cabal"
+                            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">The
+                            8 CEOs</a>
+                        <a href="#tokenomics"
+                            class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">Money
+                            Flow</a>
+                    </div>
+                </div>
+                <div>
+                    <a href="javascript:window.scrollTo(0, document.body.scrollHeight)"
+                        class="bg-white/10 hover:bg-green-600 hover:text-black border border-green-500/50 text-green-400 px-4 py-2 rounded-full text-sm font-bold transition duration-300 uppercase tracking-wide">
+                        Join The Cartel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-24 pb-12 sm:pt-32 sm:pb-16 lg:pb-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+            <!-- Banner Image Area -->
+            <div
+                class="relative w-full mb-10 group overflow-hidden rounded-xl border border-white/10 shadow-2xl aspect-banner bg-gray-900 flex items-center justify-center">
+                <!-- 
+                     BANNER IMAGE
+                     Ratio: 3:1 
+                -->
+                <img src="images/banner.jpg" alt="Circle of Corporations Banner"
+                    class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-700">
+
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+
+                <div class="relative z-10 p-4">
+                    <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white mb-4 glitch-text"
+                        data-text="THE TRUTH IS OUT">
+                        THE TRUTH IS OUT
+                    </h1>
+                    <p class="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto font-light">
+                        8 Tech CEOs. One Secret Cabal. Infinite Money Glitch.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Cylindrical CA Component -->
+            <div class="flex justify-center mb-12">
+                <div
+                    class="ca-container rounded-full py-3 px-2 pl-6 flex items-center gap-4 max-w-2xl w-full mx-4 sm:mx-auto">
+                    <span class="text-green-400 font-mono text-sm sm:text-base truncate flex-1 text-left" id="ca-text">
+                        FtGFoo2X9F3nY5yXiHovJxiAXpKh6p84MQ8848ufpump
+                    </span>
+                    <button onclick="copyCA()"
+                        class="bg-green-600 hover:bg-green-500 text-black font-bold py-2 px-6 rounded-full transition-colors flex items-center gap-2 group">
+                        <span id="copy-btn-text">COPY CA</span>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4 group-hover:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats/Hook -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center border-t border-b border-white/10 py-8 bg-black/30">
+                <div class="p-4">
+                    <h3 class="text-3xl font-bold text-white mb-1">8</h3>
+                    <p class="text-gray-400 text-sm uppercase tracking-widest">Billionaire CEOs</p>
+                </div>
+                <div class="p-4 border-l border-r border-white/10">
+                    <h3 class="text-3xl font-bold text-white mb-1">100%</h3>
+                    <p class="text-gray-400 text-sm uppercase tracking-widest">Coordinated Pumps</p>
+                </div>
+                <div class="p-4">
+                    <h3 class="text-3xl font-bold text-white mb-1">∞</h3>
+                    <p class="text-gray-400 text-sm uppercase tracking-widest">Money Loop</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Narrative Section -->
+    <section id="about" class="py-16 grid-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-6 border-l-4 border-green-500 pl-4">
+                        CORPORATE AMERICA'S <br>
+                        <span class="text-green-500">NOT-SO-SECRET</span> SOCIETY
+                    </h2>
+                    <div class="space-y-4 text-gray-300 leading-relaxed">
+                        <p>
+                            While retail traders chase earnings calls, the real game happens in private jets and yacht
+                            clubs. Satya sends Sam a WhatsApp. Sam tips off Elon. Elon subtly influences Jensen. Jensen
+                            greenlights Pichai.
+                        </p>
+                        <p>
+                            The AI revolution wasn't an accident - it was a coordinated wealth transfer scheme. You
+                            bought the dip, they bought everything. You HODLed, they cashed out.
+                        </p>
+                        <p class="font-bold text-white">
+                            $CIRCLE exposes the infrastructure: the handshake deals, the family office connections, the
+                            coordinated media cycles.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative group">
+                    <!-- 
+                        NARRATIVE IMAGE 
+                        Ratio: 1.83:1
+                    -->
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-green-600 to-yellow-600 rounded-lg blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200">
+                    </div>
+                    <div
+                        class="relative rounded-lg bg-black border border-gray-800 overflow-hidden aspect-card flex items-center justify-center">
+                        <img src="images/graph.jpg" alt="The Money Flow Graph" class="w-full h-full object-cover">
+                        <div
+                            class="absolute bottom-0 left-0 bg-black/80 w-full p-2 text-center text-xs text-green-400 font-mono">
+                            FIG 1.0: THE INFINITE MONEY LOOP
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The 8 CEOs Section (The Circle) - CONSOLIDATED -->
+    <section id="cabal" class="py-24 bg-black/60 relative overflow-hidden">
+        <!-- Decorative Element -->
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-2 bg-gradient-to-r from-transparent via-neon-red to-transparent opacity-50">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 glitch-font">THE <span
+                        class="text-neon-red">HIGH TABLE</span></h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    Eight individuals define our reality. They don't compete; they coordinate. The new world order isn't
+                    geopolitical—it's corporate.
+                </p>
+            </div>
+
+            <!-- Single Group Image with Effect -->
+            <div
+                class="relative max-w-5xl mx-auto group rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-red-900/20">
+                <div
+                    class="absolute -inset-1 bg-gradient-to-b from-neon-red/20 to-transparent blur-md opacity-50 group-hover:opacity-70 transition-opacity duration-500">
+                </div>
+                <div class="relative aspect-video overflow-hidden">
+                    <img src="images/boardroom.jpg" alt="The 8 Tech CEOs"
+                        class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700 grayscale hover:grayscale-0">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-6 md:p-8">
+                        <p class="text-white font-bold text-lg mb-2 glitch-font">MUSK | ALTMAN | HUANG | PICHAI |
+                            ZUCKERBERG | BEZOS | NADELLA | COOK</p>
+                        <p class="text-green-400 font-mono text-sm">STATUS: ACTIVE COORDINATION // NET WORTH: >$10
+                            TRILLION</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics / Why Now -->
+    <section id="tokenomics" class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 bg-green-900/5"></div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h2 class="text-3xl font-bold text-white mb-8">WHY <span class="text-green-500">$CIRCLE</span> NOW?</h2>
+
+            <div class="bg-black/80 border border-green-900 rounded-2xl p-8 backdrop-blur-sm">
+                <p class="text-lg text-gray-300 mb-6">
+                    In this century, tech companies have always been wealthy. But now, with the <strong>AI
+                        BUBBLE</strong>, they are just investing in each other, passing on the same money.
+                </p>
+                <div class="p-4 bg-green-900/20 rounded-lg border border-green-500/30 mb-6">
+                    <p class="font-mono text-green-400 text-sm">
+                        Microsoft -> OpenAI -> Nvidia -> Microsoft (Cloud Credits) -> REPEAT
+                    </p>
+                </div>
+                <p class="text-gray-400 italic">
+                    Finally, a meme coin that follows the money trail instead of the fairy tale.
+                </p>
+            </div>
+
+            <div class="mt-12 flex justify-center gap-4">
+                <a href="https://pump.fun/coin/FtGFoo2X9F3nY5yXiHovJxiAXpKh6p84MQ8848ufpump"
+                    class="bg-white text-black font-bold px-8 py-3 rounded-full hover:scale-105 transition transform">Buy
+                    on Pumpfun</a>
+                <a href="https://dexscreener.com/solana/7e2ferjepeptvkpermqr4saqbt86rngzsthvmycuftpw"
+                    class="border border-white text-white font-bold px-8 py-3 rounded-full hover:bg-white/10 transition transform">View
+                    on DEX</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black border-t border-white/10 py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4 glitch-font">$CIRCLE</h2>
+            <p class="text-gray-500 text-sm max-w-md mx-auto mb-8">
+                Satire. Not financial advice. The house always wins, but at least we know who owns the house.
+            </p>
+            <div class="flex justify-center space-x-6">
+                <a href="https://x.com/CIRCLEmemecoin" class="text-gray-400 hover:text-green-500 transition">Twitter /
+                    X</a>
+                <a href="https://t.me/circle_on_sol" class="text-gray-400 hover:text-green-500 transition">Telegram</a>
+            </div>
+            <div class="mt-8 text-xs text-gray-700">
+                &copy; 2025 Circle of Corporations. All wrongs reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. Copy to Clipboard Functionality ---
+        function copyCA() {
+            // Replace this with actual CA
+            const caText = "FtGFoo2X9F3nY5yXiHovJxiAXpKh6p84MQ8848ufpump";
+
+            navigator.clipboard.writeText(caText).then(() => {
+                const btnText = document.getElementById("copy-btn-text");
+                const originalText = btnText.innerText;
+
+                btnText.innerText = "COPIED!";
+                btnText.parentElement.classList.add("bg-green-400");
+
+                setTimeout(() => {
+                    btnText.innerText = originalText;
+                    btnText.parentElement.classList.remove("bg-green-400");
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // --- 2. Background Canvas Animation (The Network) ---
+        const canvas = document.getElementById('network-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(0, 255, 65, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(window.innerWidth / 10, 100); // Responsive count
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Draw connections
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 255, 65, ${0.1 - distance / 1500})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            resize();
+            initParticles();
+        });
+
+        resize();
+        initParticles();
+        animate();
+    </script>
+</body>
+
+</html>
